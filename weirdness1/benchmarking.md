@@ -80,10 +80,11 @@ bool is_prime_while(nt num)
 ```
 
 Right, let's compare some different compiler flags.  If I understand the g++ documentation
-correctly, then `-Ofast` shoule be equivalent to `-O3` with some possibly "unsafe" floating-point
+correctly, then `-Ofast` should be equivalent to `-O3` with some possibly "unsafe" floating-point
 optimisations.
 
 Floating-point compare:
+
   Compiler flags                       |  Time (seconds, 3sf)
   ------------------------------------ | ---
   -Ofast                               |  13.2
@@ -91,7 +92,9 @@ Floating-point compare:
   -Ofast -mtune=native -march=native   |  11.9
   -O3 -mtune=native -march=native      |  11.9
   -mtune=native -O2                    |  12.6
+
 Integer compare, get:
+
   Compiler flags                       |  Time (seconds, 3sf)
   ------------------------------------ | ---
   -Ofast                               |  12.8
@@ -99,7 +102,9 @@ Integer compare, get:
   -Ofast -mtune=native -march=native   |  12.8
   -O3 -mtune=native -march=native      |  12.8
   -mtune=native -O2                    |  12.3  (!!)
+
 While loop version, get:
+
   Compiler flags                       |  Time (seconds, 3sf)
   ------------------------------------ | ---
   -Ofast                               |  12.8
@@ -115,6 +120,7 @@ Even weirder is the following: if I comment out the second two functions, and ru
 test again, we get
 
 Floating-point compare, redux:
+
   Compiler flags                       |  Time (seconds, 3sf)
   ------------------------------------ | ---
   -Ofast                               |  11.8
@@ -128,7 +134,7 @@ If we look at the produced assembler code, then the `is_prime` is being inlined,
 appear to be any difference between the inlined code.  This behaviour does not occur for the other
 functions.
 
-If I assmeble the assembly output, and then link, we get the same behaviour, so this isn't a weird
+If I assemble the assembly output, and then link, we get the same behaviour, so this isn't a weird
 compiler thing.  But this gives us the opportunity to fiddle with the assembly output, and I can
 then recreate the behaviour.  This is of course only a _conjecture_ as to what's going on.  The key
 is the odd assembler directive `.p2align 4,,10`, see
@@ -183,6 +189,7 @@ For kicks, on an ATOM N455
 Testing a somewhat smaller prime, using g++ 4.8.1 on the old mingw (32), I get
 
 Floating point version:
+
   Compiler flags                       |  Time (seconds, 3sf)
   ------------------------------------ | ---
   -Ofast                               |  2.26
@@ -190,7 +197,9 @@ Floating point version:
   -Ofast -mtune=native -march=native   |  2.39
   -O3 -mtune=native -march=native      |  2.62
   -mtune=native -O2                    |  2.78
+
 Integer version:
+
   Compiler flags                       |  Time (seconds, 3sf)
   ------------------------------------ | ---
   -Ofast                               |  1.84
@@ -198,7 +207,9 @@ Integer version:
   -Ofast -mtune=native -march=native   |  1.84
   -O3 -mtune=native -march=native      |  1.84
   -mtune=native -O2                    |  1.90
+
 While loop version:
+
   Compiler flags                       |  Time (seconds, 3sf)
   ------------------------------------ | ---
   -Ofast                               |  1.84
@@ -209,6 +220,7 @@ While loop version:
 
 So, much more reasonable numbers!  Finally, the integer version, compiled on the atom, but then run
 on the i5:
+
   Compiler flags                       |  Time (seconds, 3sf)
   ------------------------------------ | ---
   -Ofast                               |  10.8
@@ -216,6 +228,7 @@ on the i5:
   -Ofast -mtune=native -march=native   |  10.8
   -O3 -mtune=native -march=native      |  11.2
   -mtune=native -O2                    |  11.6
+
 Now, the _extraordinary_ thing here is that this is testing the _same_ prime as above
 (1152921504606846697) but we compiled this on a 32-bit machine, so we're emulating 64-bit
 arithmetic in software (as a check of the assmebler output shows).  And yet it's faster!
@@ -299,6 +312,8 @@ Filename | Description
 
 Useful links
 ------------
+
+Various Useful links:
 
     * [Intel Optimisation Manual](http://www.intel.co.uk/content/www/uk/en/architecture-and-technology/64-ia-32-architectures-optimization-manual.html)
     * [Useful StackOverflow post](http://stackoverflow.com/questions/18113995/performance-optimisations-of-x86-64-assembly-alignment-and-branch-prediction)
