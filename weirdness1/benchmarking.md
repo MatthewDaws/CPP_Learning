@@ -150,6 +150,7 @@ I guess this is a hedge: pad if possible, but don't waste too much space to do s
 
 So, I fiddle with these `p2align` commands, assemble, and compile.  We find some further extremely
 weird behaviour:
+
    * For `-Ofast`, the `.p2align 4,,10` has no effect, as more than 10 bytes of padding would be
 needed.  However, the resulting loop runs quickly.
    * For `-O3`, the `.p2align 4,,10` has no effect, as more than 10 bytes of padding would be
@@ -175,10 +176,77 @@ as `.p2align 4,,`
       * For 52-, back to 13.2 secs
       * Seem to be on a 32 byte loop
 
-**TODO:**
+Reverse engineer what the compiler is doing
+-------------------------------------------
+
+The critical loop in `minimal2.asm` is the following.  The setup has:
+```
+ECX = 3
+RBX = 1152921504606846697 (prime to be tested)
+XMM6 = load memory initialised to:
+    .long	-1
+    .long	1104150527
+```
+Form staring hard at the non-inlined version (see `_Z14is_prime_floaty:`) we find that XMM6 is set to the square-root of the prime.
+
+The entry point to this inner loop is `L19`.
+```
+.L32:
+    --- Finish if XMM6 < RCX ---
+	pxor	%xmm0, %xmm0           Zero XMM0
+	cvtsi2sdq	%rcx, %xmm0       Convert RCX to double in XMM0
+	ucomisd	%xmm0, %xmm6        Compare XMM6 - XMM0
+	jb	.L31                     If less than zero, skip
+.L19:
+    --- This block checks if RBX % RCX == 0 ---
+	xorl	%edx, %edx             Zero EDX
+	movq	%rbx, %rax             Move RBX to RAX
+	divq	%rcx                   Divide by RCX
+	testq	%rdx, %rdx            Is RDX = 0 ?
+	je	.L26                     If so, then not prime, so exit
+    --- ++RCX and jump back to L32 if RCX<0  (which is never??) ---
+	addq	$1, %rcx               Increase RCX (sign bit==1 iff RCX < 0)
+	jns	.L32                    If sign bit set jump back to L32
+    --- RDX = (RCX / 2) + ( RCX & 1 ) ---
+    --- That is, halve RCX but round _up_ ---
+	movq	%rcx, %rdx             Move RCX to RDX
+	movq	%rcx, %rax             Move RCX to RAX
+	pxor	%xmm0, %xmm0           Zero XMM0
+	shrq	%rdx                   Divide RDX by 2
+	andl	$1, %eax               Logical and EAX with 1
+	orq	%rax, %rdx              RDX = RDX or RAX
+    --- XMM0 = RDX as double, and then XMM0 += XMM0
+    --- Overall effect is: if RCX even then XMM0 = RCX;
+    ---    if RCX odd then XMM0 = RCX+2
+    --- insane way to do this! ---
+	cvtsi2sdq	%rdx, %xmm0       Convert RDX to double in XMM0
+	addsd	%xmm0, %xmm0          XMM0 += XMM0
+    --- If XMM6 >= XMM0 then jump back to L19 ---
+	ucomisd	%xmm0, %xmm6        Compare XMM6 - XMM0
+	jae	.L19                    If >=0 then jump to L19
+.L31
+```
+
+So I think this might be a compiler bug:
+
+* Why the insane way to calculate XMM0 = RCX + ( RCX&1==1 ? 2 : 0)   ??
+* The real inner loop is L19; so why not align this??
+* The `jns .L32` command breaks the rules: I think this is never taken, but it's a conditional jump backwards, so a static branch predictor will always get this wrong.  (But Core architecture processors shouldn't use this...) 
+
+With no `nop`s the label `.L19` is at offset 0x2fa4.  So the above timings translate into:
+
+* Offset 0x2fa4 -- 0x2faa    13.2secs
+* Offset 0x2fab -- 0x2fae    12.3secs
+* Offset 0x2faf -- 0x2fb7    11.8secs
+* Offset 0x2fb8 -- 0x2fc4    13.2secs
+
+TODO
+----
+
    * Investigate which jumps might be becoming unaligned in this.
-   * Can we recreate this with an easier loop?
    * Recreate on linux?  With Visual C++?
+
+
 
 
 

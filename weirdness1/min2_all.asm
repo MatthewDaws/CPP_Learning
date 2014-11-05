@@ -1441,11 +1441,11 @@ Disassembly of section .text:
   4023c0:	56                   	push   %rsi
   4023c1:	53                   	push   %rbx
   4023c2:	48 83 ec 28          	sub    $0x28,%rsp
-  4023c6:	48 8b 05 03 0d 00 00 	mov    0xd03(%rip),%rax        # 4030d0 <__CTOR_LIST__>
+  4023c6:	48 8b 05 e3 0c 00 00 	mov    0xce3(%rip),%rax        # 4030b0 <__CTOR_LIST__>
   4023cd:	83 f8 ff             	cmp    $0xffffffff,%eax
   4023d0:	89 c3                	mov    %eax,%ebx
   4023d2:	74 2c                	je     402400 <__do_global_ctors+0x40>
-  4023d4:	48 8d 35 f5 0c 00 00 	lea    0xcf5(%rip),%rsi        # 4030d0 <__CTOR_LIST__>
+  4023d4:	48 8d 35 d5 0c 00 00 	lea    0xcd5(%rip),%rsi        # 4030b0 <__CTOR_LIST__>
   4023db:	85 db                	test   %ebx,%ebx
   4023dd:	74 0b                	je     4023ea <__do_global_ctors+0x2a>
   4023df:	90                   	nop
@@ -1459,7 +1459,7 @@ Disassembly of section .text:
   4023f6:	5e                   	pop    %rsi
   4023f7:	e9 c4 f3 ff ff       	jmpq   4017c0 <atexit>
   4023fc:	0f 1f 40 00          	nopl   0x0(%rax)
-  402400:	48 8d 35 c9 0c 00 00 	lea    0xcc9(%rip),%rsi        # 4030d0 <__CTOR_LIST__>
+  402400:	48 8d 35 a9 0c 00 00 	lea    0xca9(%rip),%rsi        # 4030b0 <__CTOR_LIST__>
   402407:	31 db                	xor    %ebx,%ebx
   402409:	eb 07                	jmp    402412 <__do_global_ctors+0x52>
   40240b:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
@@ -2541,7 +2541,7 @@ Disassembly of section .text:
   402f86:	e8 6d e6 ff ff       	callq  4015f8 <_ZNSt6chrono3_V212steady_clock3nowEv>
   402f8b:	b9 03 00 00 00       	mov    $0x3,%ecx
   402f90:	48 89 c7             	mov    %rax,%rdi
-  402f93:	eb 43                	jmp    402fd8 <main+0x88>
+  402f93:	eb 1b                	jmp    402fb0 <main+0x60>
   402f95:	90                   	nop
   402f96:	90                   	nop
   402f97:	90                   	nop
@@ -2554,141 +2554,102 @@ Disassembly of section .text:
   402f9e:	90                   	nop
   402f9f:	90                   	nop
   402fa0:	90                   	nop
-  402fa1:	90                   	nop
-  402fa2:	90                   	nop
-  402fa3:	90                   	nop
-  402fa4:	90                   	nop
-  402fa5:	90                   	nop
-  402fa6:	90                   	nop
-  402fa7:	90                   	nop
-  402fa8:	90                   	nop
-  402fa9:	90                   	nop
-  402faa:	90                   	nop
-  402fab:	90                   	nop
-  402fac:	90                   	nop
-  402fad:	90                   	nop
-  402fae:	90                   	nop
-  402faf:	90                   	nop
-  402fb0:	90                   	nop
-  402fb1:	90                   	nop
-  402fb2:	90                   	nop
-  402fb3:	90                   	nop
-  402fb4:	90                   	nop
-  402fb5:	90                   	nop
-  402fb6:	90                   	nop
-  402fb7:	90                   	nop
-  402fb8:	90                   	nop
-  402fb9:	90                   	nop
-  402fba:	90                   	nop
-  402fbb:	90                   	nop
-  402fbc:	90                   	nop
-  402fbd:	90                   	nop
-  402fbe:	90                   	nop
-  402fbf:	90                   	nop
-  402fc0:	90                   	nop
-  402fc1:	90                   	nop
-  402fc2:	90                   	nop
-  402fc3:	90                   	nop
-  402fc4:	90                   	nop
-  402fc5:	90                   	nop
-  402fc6:	90                   	nop
-  402fc7:	90                   	nop
-  402fc8:	90                   	nop
-  402fc9:	66 0f ef c0          	pxor   %xmm0,%xmm0
-  402fcd:	f2 48 0f 2a c1       	cvtsi2sd %rcx,%xmm0
-  402fd2:	66 0f 2e f0          	ucomisd %xmm0,%xmm6
-  402fd6:	72 39                	jb     403011 <main+0xc1>
-  402fd8:	31 d2                	xor    %edx,%edx
-  402fda:	48 89 d8             	mov    %rbx,%rax
-  402fdd:	48 f7 f1             	div    %rcx
-  402fe0:	48 85 d2             	test   %rdx,%rdx
-  402fe3:	0f 84 87 00 00 00    	je     403070 <main+0x120>
-  402fe9:	48 83 c1 01          	add    $0x1,%rcx
-  402fed:	79 da                	jns    402fc9 <main+0x79>
-  402fef:	48 89 ca             	mov    %rcx,%rdx
-  402ff2:	48 89 c8             	mov    %rcx,%rax
-  402ff5:	66 0f ef c0          	pxor   %xmm0,%xmm0
-  402ff9:	48 d1 ea             	shr    %rdx
-  402ffc:	83 e0 01             	and    $0x1,%eax
-  402fff:	48 09 c2             	or     %rax,%rdx
-  403002:	f2 48 0f 2a c2       	cvtsi2sd %rdx,%xmm0
-  403007:	f2 0f 58 c0          	addsd  %xmm0,%xmm0
-  40300b:	66 0f 2e f0          	ucomisd %xmm0,%xmm6
-  40300f:	73 c7                	jae    402fd8 <main+0x88>
-  403011:	bd 01 00 00 00       	mov    $0x1,%ebp
-  403016:	e8 dd e5 ff ff       	callq  4015f8 <_ZNSt6chrono3_V212steady_clock3nowEv>
-  40301b:	66 0f ef c9          	pxor   %xmm1,%xmm1
-  40301f:	48 8b 0d ba 22 00 00 	mov    0x22ba(%rip),%rcx        # 4052e0 <__fu0__ZSt4cout>
-  403026:	48 29 f8             	sub    %rdi,%rax
-  403029:	f2 48 0f 2a c8       	cvtsi2sd %rax,%xmm1
-  40302e:	f2 0f 5e cf          	divsd  %xmm7,%xmm1
-  403032:	e8 c9 e5 ff ff       	callq  401600 <_ZNSo9_M_insertIdEERSoT_>
-  403037:	41 b8 03 00 00 00    	mov    $0x3,%r8d
-  40303d:	48 8d 15 bc 1f 00 00 	lea    0x1fbc(%rip),%rdx        # 405000 <.rdata>
-  403044:	48 89 c1             	mov    %rax,%rcx
-  403047:	e8 bc e5 ff ff       	callq  401608 <_ZSt16__ostream_insertIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_PKS3_x>
-  40304c:	40 84 ed             	test   %bpl,%bpl
-  40304f:	75 23                	jne    403074 <main+0x124>
-  403051:	83 ee 01             	sub    $0x1,%esi
-  403054:	0f 85 2c ff ff ff    	jne    402f86 <main+0x36>
-  40305a:	0f 28 74 24 20       	movaps 0x20(%rsp),%xmm6
-  40305f:	31 c0                	xor    %eax,%eax
-  403061:	0f 28 7c 24 30       	movaps 0x30(%rsp),%xmm7
-  403066:	48 83 c4 48          	add    $0x48,%rsp
-  40306a:	5b                   	pop    %rbx
-  40306b:	5e                   	pop    %rsi
-  40306c:	5f                   	pop    %rdi
-  40306d:	5d                   	pop    %rbp
-  40306e:	c3                   	retq   
-  40306f:	90                   	nop
-  403070:	31 ed                	xor    %ebp,%ebp
-  403072:	eb a2                	jmp    403016 <main+0xc6>
-  403074:	48 8b 0d 65 22 00 00 	mov    0x2265(%rip),%rcx        # 4052e0 <__fu0__ZSt4cout>
-  40307b:	48 ba e9 fe ff ff ff 	movabs $0xffffffffffffee9,%rdx
-  403082:	ff ff 0f 
-  403085:	e8 86 e5 ff ff       	callq  401610 <_ZNSo9_M_insertIyEERSoT_>
-  40308a:	48 8d 15 73 1f 00 00 	lea    0x1f73(%rip),%rdx        # 405004 <.rdata+0x4>
-  403091:	48 89 c1             	mov    %rax,%rcx
-  403094:	e8 7f e5 ff ff       	callq  401618 <_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc>
-  403099:	48 89 c1             	mov    %rax,%rcx
-  40309c:	e8 7f e5 ff ff       	callq  401620 <_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_>
-  4030a1:	eb ae                	jmp    403051 <main+0x101>
-  4030a3:	66 66 66 66 2e 0f 1f 	data32 data32 data32 nopw %cs:0x0(%rax,%rax,1)
-  4030aa:	84 00 00 00 00 00 
+  402fa1:	66 0f ef c0          	pxor   %xmm0,%xmm0
+  402fa5:	f2 48 0f 2a c1       	cvtsi2sd %rcx,%xmm0
+  402faa:	66 0f 2e f0          	ucomisd %xmm0,%xmm6
+  402fae:	72 39                	jb     402fe9 <main+0x99>
+  402fb0:	31 d2                	xor    %edx,%edx
+  402fb2:	48 89 d8             	mov    %rbx,%rax
+  402fb5:	48 f7 f1             	div    %rcx
+  402fb8:	48 85 d2             	test   %rdx,%rdx
+  402fbb:	0f 84 8f 00 00 00    	je     403050 <main+0x100>
+  402fc1:	48 83 c1 01          	add    $0x1,%rcx
+  402fc5:	79 da                	jns    402fa1 <main+0x51>
+  402fc7:	48 89 ca             	mov    %rcx,%rdx
+  402fca:	48 89 c8             	mov    %rcx,%rax
+  402fcd:	66 0f ef c0          	pxor   %xmm0,%xmm0
+  402fd1:	48 d1 ea             	shr    %rdx
+  402fd4:	83 e0 01             	and    $0x1,%eax
+  402fd7:	48 09 c2             	or     %rax,%rdx
+  402fda:	f2 48 0f 2a c2       	cvtsi2sd %rdx,%xmm0
+  402fdf:	f2 0f 58 c0          	addsd  %xmm0,%xmm0
+  402fe3:	66 0f 2e f0          	ucomisd %xmm0,%xmm6
+  402fe7:	73 c7                	jae    402fb0 <main+0x60>
+  402fe9:	bd 01 00 00 00       	mov    $0x1,%ebp
+  402fee:	e8 05 e6 ff ff       	callq  4015f8 <_ZNSt6chrono3_V212steady_clock3nowEv>
+  402ff3:	66 0f ef c9          	pxor   %xmm1,%xmm1
+  402ff7:	48 8b 0d e2 22 00 00 	mov    0x22e2(%rip),%rcx        # 4052e0 <__fu0__ZSt4cout>
+  402ffe:	48 29 f8             	sub    %rdi,%rax
+  403001:	f2 48 0f 2a c8       	cvtsi2sd %rax,%xmm1
+  403006:	f2 0f 5e cf          	divsd  %xmm7,%xmm1
+  40300a:	e8 f1 e5 ff ff       	callq  401600 <_ZNSo9_M_insertIdEERSoT_>
+  40300f:	41 b8 03 00 00 00    	mov    $0x3,%r8d
+  403015:	48 8d 15 e4 1f 00 00 	lea    0x1fe4(%rip),%rdx        # 405000 <.rdata>
+  40301c:	48 89 c1             	mov    %rax,%rcx
+  40301f:	e8 e4 e5 ff ff       	callq  401608 <_ZSt16__ostream_insertIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_PKS3_x>
+  403024:	40 84 ed             	test   %bpl,%bpl
+  403027:	75 2b                	jne    403054 <main+0x104>
+  403029:	83 ee 01             	sub    $0x1,%esi
+  40302c:	0f 85 54 ff ff ff    	jne    402f86 <main+0x36>
+  403032:	0f 28 74 24 20       	movaps 0x20(%rsp),%xmm6
+  403037:	31 c0                	xor    %eax,%eax
+  403039:	0f 28 7c 24 30       	movaps 0x30(%rsp),%xmm7
+  40303e:	48 83 c4 48          	add    $0x48,%rsp
+  403042:	5b                   	pop    %rbx
+  403043:	5e                   	pop    %rsi
+  403044:	5f                   	pop    %rdi
+  403045:	5d                   	pop    %rbp
+  403046:	c3                   	retq   
+  403047:	66 0f 1f 84 00 00 00 	nopw   0x0(%rax,%rax,1)
+  40304e:	00 00 
+  403050:	31 ed                	xor    %ebp,%ebp
+  403052:	eb 9a                	jmp    402fee <main+0x9e>
+  403054:	48 8b 0d 85 22 00 00 	mov    0x2285(%rip),%rcx        # 4052e0 <__fu0__ZSt4cout>
+  40305b:	48 ba e9 fe ff ff ff 	movabs $0xffffffffffffee9,%rdx
+  403062:	ff ff 0f 
+  403065:	e8 a6 e5 ff ff       	callq  401610 <_ZNSo9_M_insertIyEERSoT_>
+  40306a:	48 8d 15 93 1f 00 00 	lea    0x1f93(%rip),%rdx        # 405004 <.rdata+0x4>
+  403071:	48 89 c1             	mov    %rax,%rcx
+  403074:	e8 9f e5 ff ff       	callq  401618 <_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc>
+  403079:	48 89 c1             	mov    %rax,%rcx
+  40307c:	e8 9f e5 ff ff       	callq  401620 <_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_>
+  403081:	eb a6                	jmp    403029 <main+0xd9>
+  403083:	66 66 66 66 2e 0f 1f 	data32 data32 data32 nopw %cs:0x0(%rax,%rax,1)
+  40308a:	84 00 00 00 00 00 
 
-00000000004030b0 <_GLOBAL__sub_I__Z14is_prime_floaty>:
-  4030b0:	48 83 ec 28          	sub    $0x28,%rsp
-  4030b4:	48 8d 0d 75 4f 00 00 	lea    0x4f75(%rip),%rcx        # 408030 <_ZStL8__ioinit>
-  4030bb:	e8 68 e5 ff ff       	callq  401628 <_ZNSt8ios_base4InitC1Ev>
-  4030c0:	48 8d 0d 29 e4 ff ff 	lea    -0x1bd7(%rip),%rcx        # 4014f0 <__tcf_0>
-  4030c7:	48 83 c4 28          	add    $0x28,%rsp
-  4030cb:	e9 f0 e6 ff ff       	jmpq   4017c0 <atexit>
+0000000000403090 <_GLOBAL__sub_I__Z14is_prime_floaty>:
+  403090:	48 83 ec 28          	sub    $0x28,%rsp
+  403094:	48 8d 0d 95 4f 00 00 	lea    0x4f95(%rip),%rcx        # 408030 <_ZStL8__ioinit>
+  40309b:	e8 88 e5 ff ff       	callq  401628 <_ZNSt8ios_base4InitC1Ev>
+  4030a0:	48 8d 0d 49 e4 ff ff 	lea    -0x1bb7(%rip),%rcx        # 4014f0 <__tcf_0>
+  4030a7:	48 83 c4 28          	add    $0x28,%rsp
+  4030ab:	e9 10 e7 ff ff       	jmpq   4017c0 <atexit>
 
-00000000004030d0 <__CTOR_LIST__>:
-  4030d0:	ff                   	(bad)  
-  4030d1:	ff                   	(bad)  
-  4030d2:	ff                   	(bad)  
-  4030d3:	ff                   	(bad)  
-  4030d4:	ff                   	(bad)  
-  4030d5:	ff                   	(bad)  
-  4030d6:	ff                   	(bad)  
-  4030d7:	ff b0 30 40 00 00    	pushq  0x4030(%rax)
+00000000004030b0 <__CTOR_LIST__>:
+  4030b0:	ff                   	(bad)  
+  4030b1:	ff                   	(bad)  
+  4030b2:	ff                   	(bad)  
+  4030b3:	ff                   	(bad)  
+  4030b4:	ff                   	(bad)  
+  4030b5:	ff                   	(bad)  
+  4030b6:	ff                   	(bad)  
+  4030b7:	ff 90 30 40 00 00    	callq  *0x4030(%rax)
 
-00000000004030d8 <.ctors>:
-  4030d8:	b0 30                	mov    $0x30,%al
-  4030da:	40 00 00             	add    %al,(%rax)
+00000000004030b8 <.ctors>:
+  4030b8:	90                   	nop
+  4030b9:	30 40 00             	xor    %al,0x0(%rax)
 	...
 
-00000000004030e8 <__DTOR_LIST__>:
-  4030e8:	ff                   	(bad)  
-  4030e9:	ff                   	(bad)  
-  4030ea:	ff                   	(bad)  
-  4030eb:	ff                   	(bad)  
-  4030ec:	ff                   	(bad)  
-  4030ed:	ff                   	(bad)  
-  4030ee:	ff                   	(bad)  
-  4030ef:	ff 00                	incl   (%rax)
-  4030f1:	00 00                	add    %al,(%rax)
-  4030f3:	00 00                	add    %al,(%rax)
-  4030f5:	00 00                	add    %al,(%rax)
+00000000004030c8 <__DTOR_LIST__>:
+  4030c8:	ff                   	(bad)  
+  4030c9:	ff                   	(bad)  
+  4030ca:	ff                   	(bad)  
+  4030cb:	ff                   	(bad)  
+  4030cc:	ff                   	(bad)  
+  4030cd:	ff                   	(bad)  
+  4030ce:	ff                   	(bad)  
+  4030cf:	ff 00                	incl   (%rax)
+  4030d1:	00 00                	add    %al,(%rax)
+  4030d3:	00 00                	add    %al,(%rax)
+  4030d5:	00 00                	add    %al,(%rax)
 	...
