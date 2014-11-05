@@ -275,7 +275,7 @@ void time8a()
 
 int main()
 {
-	if ( ! tests() ) { return 1; }
+	//if ( ! tests() ) { return 1; }
 	
 	/*time1();
 	time2();
@@ -286,8 +286,20 @@ int main()
 	time5b();
 	time6();
 	time7();
-	time8();*/
-	time8a();
+	time8();
+	time8a();*/
+
+	cout << "1-thread, billion." << endl;
+	for (int n=0; n<20; ++n) {
+		auto func = []() { dotime6a(1000000000,512000); };
+		cout << timeit(1, func) << endl;
+	}
+
+	cout << "2-threads, billion." << endl;
+	for (int n=0; n<20; ++n) {
+		auto func = []() { dotime7(1000000000,true); };
+		cout << timeit(1, func) << endl;
+	}
 
 	return 0;
 	

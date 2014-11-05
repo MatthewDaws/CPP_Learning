@@ -42,79 +42,31 @@ This abstracts the ideas of the above: the constructor finds the initial small l
 
 T = unsigned int
 
-Algorithm | Size (1000s) | Time (seconds)
---- | --- | ---
-prime_list | 1 | 3.62e-6
-           | 10 | 3.84e-5
-           | 100 | 3.92e-4
-           | 1000 | 3.06e-3
-           | 10,000 | 4.31e-2
-           | 100,000 | 5.39e-1
-           | 1000,000 | 6.39
-prime_list1 | 1 | 3.95e-6
-   | 10 | 4.18e-5
-   | 100 | 4.05e-4
-   | 1000 | 4.17e-3
-   | 10,000 | 4.43e-2
-   | 100,000 | 5.67e-1
-   | 1000,000 | 6.94568
-prime_list2  |  1  | 3.41e-6
-(strip size  |  10 |2.57e-5
-80000)       |  100 | 3.14e-4
-   | 1000 | 3.17e-3
-   | 10,000 | 3.22e-2
-   | 100,000 | 3.43e-1
-   | 1000,000 | 3.70
-prime_list2  |  1  | 3.40e-6
-(strip size  |  10 | 2.55e-5
-512000)       |  100 | 3.11e-4
-   | 1000 | 3.14e-3
-   | 10,000 | 3.15e-2
-   | 100,000 | 3.20e-1
-   | 1000,000 | 3.19
-prime_list3  |  1  | 3.22e-6
-(strip size  |  10 | 2.53e-5
-512000)       |  100 | 3.11e-4
-   | 1000 | 3.15e-3
-   | 10,000 | 3.15e-2
-   | 100,000 | 3.23e-1
-   | 1000,000 | 3.21
-sieve_stripe |  1  | 4.29e-6
-(strip size  |  10 | 3.11e-5
-512000)       |  100 | 3.79e-4
-   | 1000 | 3.92e-3
-   | 10,000 | 3.87e-2
-   | 100,000 | 3.85e-1
-   | 1000,000 | 3.88
+Size (1000s) | prime_list | prime_list1 | prime_list2 (size 80k) | prime_list2 (size 512k) | prime_list3 (size 512k) | sieve_stripe (512k)
+--- | ---
+1 | 3.62e-6 | 3.95e-6 | 3.41e-6 | 3.40e-6 | 3.22e-6 | 4.29e-6
+10 | 3.84e-5 | 4.18e-5 |2.57e-5 | 2.55e-5 | 2.53e-5 | 3.11e-5
+100 | 3.92e-4 | 4.05e-4 | 3.14e-4 | 3.11e-4 | 3.11e-4 | 3.79e-4
+1000 | 3.06e-3 | 4.17e-3 | 3.17e-3 | 3.14e-3 | 3.15e-3 | 3.92e-3
+10,000 | 4.31e-2 | 4.43e-2 | 3.22e-2 | 3.15e-2 | 3.15e-2 | 3.87e-2
+100,000 | 5.39e-1 | 5.67e-1 | 3.43e-1 | 3.20e-1 | 3.23e-1 | 3.85e-1
+1000,000 | 6.39 | 6.94568 | 3.70 | 3.19 | 3.21 | 3.88
 
 Various experiments with changing the "strip size" in different algorithms all tell the same story: the optimal size is when the processed section takes around 32k of memory, or the L1 data cache of my i5.  Smaller sizes are significantly slower (due to overhead) while larger sizes are a little slower; but the difference between a strip of roughly 32k, and a single pass, is around twice as fast!
 
 ## Just finding the sieve ##
 
-Algorithm | Size (1000s) | Time (seconds)
+Size (1000s) | Time (seconds) and algorithm
 --- | --- | ---
-sieve | 1 | 1.35e-6
-   | 10 | 1.05e-5
-   | 100 | 1.17e-4
-   | 1000 | 1.34e-3
-   | 10,000 | 1.72e-2
-   | 100,000 | 2.88e-1
-   | 1000,000 | 4.27
-sieve_stripe |  1 | 2.10e-6
-(strip size   |  10 | 1.15e-5
-512000)  | 100 | 1.20e-4
-   | 1000 | 1.34e-3
-   | 10,000 |  1.51e-2
-   | 100,000 | 1.63e-1
-   | 1000,000 | 1.77
-   | 4000,000 | 7.59
-sieve_stripe   |  10 | 8.48e-5
-(strip size  | 100 | 1.45e-4
-512000  | 1000 | 7.93e-4
-2 threads)   | 10,000 | 8.41e-3
-   | 100,000 | 1.11e-1
-   | 1000,000 | 1.31
-   | 4000,000 | 5.77
+| sieve | sieve_stripe (stripe 512k) | ditto, 2 threads
+1 | 1.35e-6  | 2.10e-6
+10 | 1.05e-5  | 1.15e-5 | 8.48e-5
+100 | 1.17e-4 | 1.20e-4 | 1.45e-4
+1000 | 1.34e-3 | 1.34e-3 | 7.93e-4
+10,000 | 1.72e-2 |  1.51e-2 | 8.41e-3
+100,000 | 2.88e-1 | 1.63e-1 | 1.11e-1
+1000,000 | 4.27 | 1.77 | 1.31
+4000,000 |      | 7.59 | 5.77
 
 ## Brief thoughts on 2 threaded attempt ##
 
@@ -129,7 +81,7 @@ The timings for varying the stripe size are much less robust than for the single
   - Sometimes 16k is the quickest
   - Often 256k is faster than 64 or 128k (or 512k)
 
-So I can only assume this is some sort of memory contention / cache issue I don't fully understand.
+So I can only assume this is some sort of memory contention / cache issue I don't fully understand.  Indeed, running two copies of the single-threaded code produces a similar slowdown, so I suspect I'm just pushing the main memory too hard.
 
 
 # File list #
