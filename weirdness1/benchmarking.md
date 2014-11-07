@@ -174,7 +174,7 @@ as `.p2align 4,,`
       * For 39-42, get 12.3 secs.
       * For 43-51, back to 11.8 secs
       * For 52-, back to 13.2 secs
-      * Seem to be on a 32 byte loop
+      * Seem to be on a 32 byte loop!  This seems critical somehow-- the 16-byte boundary thing sould suggest that 27 nops should be as good as 11; but that's not true.
 
 Reverse engineer what the compiler is doing
 -------------------------------------------
@@ -204,11 +204,10 @@ The entry point to this inner loop is `L19`.
 	divq	%rcx                   Divide by RCX
 	testq	%rdx, %rdx            Is RDX = 0 ?
 	je	.L26                     If so, then not prime, so exit
-    --- ++RCX and jump back to L32 if RCX<0  (which is never??) ---
+    --- ++RCX and jump back to L32 if RCX>=0 as signed int ---
 	addq	$1, %rcx               Increase RCX (sign bit==1 iff RCX < 0)
-	jns	.L32                    If sign bit set jump back to L32
-    --- RDX = (RCX / 2) + ( RCX & 1 ) ---
-    --- That is, halve RCX but round _up_ ---
+	jns	.L32                    If sign bit NOT set jump back to L32
+    --- RDX = (RCX / 2) | ( RCX & 1 )  Don't quite understand this ---
 	movq	%rcx, %rdx             Move RCX to RDX
 	movq	%rcx, %rax             Move RCX to RAX
 	pxor	%xmm0, %xmm0           Zero XMM0
@@ -216,9 +215,6 @@ The entry point to this inner loop is `L19`.
 	andl	$1, %eax               Logical and EAX with 1
 	orq	%rax, %rdx              RDX = RDX or RAX
     --- XMM0 = RDX as double, and then XMM0 += XMM0
-    --- Overall effect is: if RCX even then XMM0 = RCX;
-    ---    if RCX odd then XMM0 = RCX+2
-    --- insane way to do this! ---
 	cvtsi2sdq	%rdx, %xmm0       Convert RDX to double in XMM0
 	addsd	%xmm0, %xmm0          XMM0 += XMM0
     --- If XMM6 >= XMM0 then jump back to L19 ---
@@ -227,18 +223,19 @@ The entry point to this inner loop is `L19`.
 .L31
 ```
 
-So I think this might be a compiler bug:
+Corrected understanding (see below): because cvtsi2sdq is _signed_ conversion, the block of code after `L32` will fail if the most significant bit of `RCX` is set (i.e. if `RCX` gets very large).  This never actually happens in our algorithm, but the compiler would have to be quite smart to know that.  So really it's only the top half we need to look at, and I don't see any problems here.  In particular, this is correct for a static branch analyser: `jns .L32` should be taken (it's a backwards branch) while `jb .L31` and `je .L26` shouldn't be taken, which is fine, as they are forward branches.
 
-* Why the insane way to calculate XMM0 = RCX + ( RCX&1==1 ? 2 : 0)   ??
-* The real inner loop is L19; so why not align this??
-* The `jns .L32` command breaks the rules: I think this is never taken, but it's a conditional jump backwards, so a static branch predictor will always get this wrong.  (But Core architecture processors shouldn't use this...) 
 
-With no `nop`s the label `.L19` is at offset 0x2fa4.  So the above timings translate into:
+Micro-op cache?
+===============
 
-* Offset 0x2fa4 -- 0x2faa    13.2secs
-* Offset 0x2fab -- 0x2fae    12.3secs
-* Offset 0x2faf -- 0x2fb7    11.8secs
-* Offset 0x2fb8 -- 0x2fc4    13.2secs
+From reading the intel optimisation manual, we find:
+
+> The Decoded ICache can hold only up to 18 micro-ops per each 32 byte aligned memory chunk.
+
+
+
+
 
 TODO
 ----
@@ -362,6 +359,9 @@ With -O3 flags:
 	ucomisd	%xmm0, %xmm6
 	jae	.L19
 ```
+
+For an explanation of the strange code at the end, google "round to odd" or see my SO question:
+http://stackoverflow.com/questions/26798761/unsigned-64-bit-to-double-conversion-why-this-algorithm-from-g
 
 
 What the files are

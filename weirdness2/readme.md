@@ -1,5 +1,7 @@
 # Trying again with an easier loop #
 
+(Note: have now moved to g++ 4.9.2 not 4.9.1 so there might be minor changes with e.g. line numbers in assembler output.)
+
 This is a follow-on from before, with now a simple integer-only testing loop:
 
 ```
@@ -37,9 +39,7 @@ the static branch prediction algorithm: make the fall-through code following a c
 likely target for a branch with a forward target, and make the fall-through code following a conditional
 branch be the unlikely target for a branch with a backward target. 
 
-This seems correct here: `je .L28` mostly won't be taken, is a forward branch, and so the fall-through being the default is correct; similarly `jne .L23` mostly will be taken, but has a backward target.  Oh, but this is irrelevant for me:
-
-> The Intel Core microarchitecture does not use the static prediction heuristic...
+This seems correct here: `je .L28` mostly won't be taken, is a forward branch, and so the fall-through being the default is correct; similarly `jne .L23` mostly will be taken, but has a backward target.
 
 We also have this:
 
@@ -74,7 +74,7 @@ From "weirdness1", we found that `-O2` produced actually faster code, for the in
 	jae	.L13
 ```
 
-The only difference seems to be the `cmpq	%r8, %r9` command, which uses a register, not a constant, to compare to...
+The only difference seems to be the `cmpq %r8, %r9` command, which uses a register, not a constant, to compare to...
  
 
 ## Async.cpp ##
