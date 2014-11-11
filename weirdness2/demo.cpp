@@ -18,8 +18,11 @@ bool is_prime_int(nt num)
 int main()
 {
 	//nt num = 9223372036854775783;
-	nt num = 1152921504606846697;
-	//nt num = 1125899906842553;
+	//nt num = 1152921504606846697;
+	//nt num = 4503599627370449; // 2**52 - 47
+	nt num = 1125899906842553;  // About 2**50
+	//nt num = 281474976710597; // 2**48 - 59
+	//nt num = 17592186044399; // 2**44 - 17
 	
 	std::chrono::steady_clock::time_point t1,t2;
 	for (int n=0; n<5; ++n) {

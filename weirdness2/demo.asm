@@ -4,6 +4,7 @@
 	.def	__tcf_0;	.scl	3;	.type	32;	.endef
 	.seh_proc	__tcf_0
 __tcf_0:
+.LFB2009:
 	.seh_endprologue
 	leaq	_ZStL8__ioinit(%rip), %rcx
 	jmp	_ZNSt8ios_base4InitD1Ev
@@ -13,6 +14,7 @@ __tcf_0:
 	.def	_Z12is_prime_inty;	.scl	2;	.type	32;	.endef
 	.seh_proc	_Z12is_prime_inty
 _Z12is_prime_inty:
+.LFB1841:
 	subq	$56, %rsp
 	.seh_stackalloc	56
 	.seh_endprologue
@@ -107,6 +109,7 @@ _Z12is_prime_inty:
 	.def	main;	.scl	2;	.type	32;	.endef
 	.seh_proc	main
 main:
+.LFB1842:
 	pushq	%r13
 	.seh_pushreg	%r13
 	pushq	%r12
@@ -135,6 +138,7 @@ main:
 	movl	$2, %r8d
 	movq	%rax, %r12
 	jmp	.L21
+	.p2align 4,,10
 .L23:
 	movq	%rbx, %rax
 	xorl	%edx, %edx
@@ -193,6 +197,7 @@ main:
 	.def	_GLOBAL__sub_I__Z12is_prime_inty;	.scl	3;	.type	32;	.endef
 	.seh_proc	_GLOBAL__sub_I__Z12is_prime_inty
 _GLOBAL__sub_I__Z12is_prime_inty:
+.LFB2010:
 	subq	$40, %rsp
 	.seh_stackalloc	40
 	.seh_endprologue
@@ -215,7 +220,7 @@ _GLOBAL__sub_I__Z12is_prime_inty:
 .LC1:
 	.long	0
 	.long	1104006501
-	.ident	"GCC: (x86_64-posix-sjlj-rev1, Built by MinGW-W64 project) 4.9.1"
+	.ident	"GCC: (x86_64-posix-seh-rev0, Built by MinGW-W64 project) 4.9.2"
 	.def	_ZNSt8ios_base4InitD1Ev;	.scl	2;	.type	32;	.endef
 	.def	sqrt;	.scl	2;	.type	32;	.endef
 	.def	_ZNSt6chrono3_V212steady_clock3nowEv;	.scl	2;	.type	32;	.endef

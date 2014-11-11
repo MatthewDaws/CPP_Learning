@@ -18,7 +18,6 @@ bool is_prime_int(nt num)
 With `g++ -std=c++11 -march=native -mtune=native -O3 -S demo.cpp -o demo.asm` on my machine, this compiles to the following inner-loop:
 
 ```
-	jmp	.L21
 	.p2align 4,,10
 .L23:
 	movq	%rbx, %rax
@@ -53,7 +52,14 @@ Finally, notice again the `.p2align 4,,10` which may or may not do anything, tha
 
 ## Adding nops ##
 
-The IPython notebook `Run_with_nops` adds nops before the .L23 label.  The end result is terribly boring: not difference at all, with all runs being within 1% of each other.  So I can't recreate the behaviour I saw before with this simple loop.
+The IPython notebook `Run_with_nops` adds nops before the .L23 label.  The end result is terribly boring: no difference at all, with all runs being within 1% of each other.  So I can't recreate the behaviour I saw before with this simple loop.
+
+Actually, there is a little story here.  Initially, for some of the larger primes, it seems that with 16 and 80 nops,
+we get a slightly (4%) faster run.  It's odd that this is stable under repeated runs.  I also got the IPython script to randomise the order of tests, and we still see it (perhaps this is not surprising: there is a lot of operating system action between runs of the `.exe` file so why should changing the order really matter?)
+
+However, if I just increase the number of runs, from 5 to 10, then the effect completely disappears.  So this is just some weird artifact: if it were real, then doing more tests shouldn't change it.  This still seems slightly odd to me, but I guess it's just something to be aware of.
+
+See `results.txt` for text of the output, and the IPython notebook for some histograms etc.
 
 ## -O2 flag ##
 
