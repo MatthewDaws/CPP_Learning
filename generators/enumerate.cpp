@@ -29,8 +29,8 @@ private:
 public:
 	EnumIter(SizeType init) : index{init} {}
    const SizeType& operator*() { return index; }
-	SizeType operator++(int) { auto old = index; ++index; return old; }
-	SizeType operator++() { return ++index; }
+	EnumIter operator++(int) { auto old = *this; ++index; return old; }
+	EnumIter& operator++() { ++index; return *this; }
 	bool operator==(EnumIter<SizeType> other)const { return index == other.index; }
 	bool operator!=(EnumIter<SizeType> other)const { return index != other.index; }
 };
