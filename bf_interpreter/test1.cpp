@@ -34,6 +34,7 @@ void TestArray()
 
 
 // Mock BFInstructions class
+// Uses naked new commands, but as this is a test, we'll ignore this.
 
 class BFIMock : public BFInstructions
 {
@@ -52,7 +53,7 @@ public:
 
 void TestMachine()
 {
-   BFIMock* bfi = new BFIMock;
+   auto bfi = std::make_shared<BFIMock>();
    bfi->commands.push_back(new CommandIncCell);
    bfi->commands.push_back(new CommandIncPtr);
    bfi->commands.push_back(new CommandIncCell);
@@ -62,7 +63,7 @@ void TestMachine()
    bfi->commands.push_back(new CommandIncCell);
    bfi->commands.push_back(new CommandIncCell);
 
-   BFMachineInternalStorage bf{std::shared_ptr<BFInstructions>(bfi)};
+   BFMachineInternalStorage bf{bfi};
    bf.Step();
    cout << "Internal buffer:" << (int)bf[-1] << " " << (int)bf[0] << " " << (int)bf[1] << " " << (int)bf[2] << endl;
    bf.Step();

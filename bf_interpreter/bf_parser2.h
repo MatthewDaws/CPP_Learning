@@ -201,7 +201,12 @@ private:
    class BFParserInstructions : public BFInstructions
    {
    public:
+      BFParserInstructions() {}
       virtual ~BFParserInstructions();
+      // Can't allow copying...
+      // Though as this is a _private_ subclass, this is not so much a problem
+      BFParserInstructions(const BFParserInstructions& other) = delete;
+      BFParserInstructions& operator=(const BFParserInstructions& other) = delete;
       std::vector<CommandBase*> commands;
       virtual CommandBase& Get(inPtrType index)const;
       virtual bool AtEnd(inPtrType index)const;

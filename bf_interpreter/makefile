@@ -2,7 +2,7 @@ CC = g++
 //CPPFLAGS = -std=c++11 -O3 -march=native -mtune=native -mfpmath=sse
 //CPPFLAGS = -std=c++11 -O3 -march=native -mtune=native -mfpmath=sse -flto
 //CPPFLAGS = -std=c++11 -D_GLIBCXX_DEBUG
-CPPFLAGS = -std=c++11 -Wall
+CPPFLAGS = -std=c++14 -Wall
 
 targets: test1.exe test2.exe
 
@@ -23,4 +23,4 @@ bf_parser2.o : bf_parser2.cpp bf.h bf_parser2.h
 bf_machine.o : bf_machine.cpp bf.h
    
 clean :
-	-rm bf_machine.o test.o test1.exe bf_parser1.o bf_parser2.o test2.exe
+	-rm bf_machine.o test1.o test1.exe bf_parser1.o bf_parser2.o test2.exe test2.o

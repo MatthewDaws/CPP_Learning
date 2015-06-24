@@ -50,7 +50,7 @@ BFParser::BFParser(const std::string& input, bool strict)
    // Use unique_ptr here, as if we throw later in the parse, want this to be
    // cleaned up for us.  The `BFParserInstructions` class has own destructor
    // which will released Commands we have pushed to it.
-   auto instrucs = std::unique_ptr<BFParserInstructions>(new BFParserInstructions);
+   auto instrucs = std::make_unique<BFParserInstructions>();
    decltype(input.size()) offset = 0;
    std::stack<inPtrType> loops;
    while ( offset < input.size() )

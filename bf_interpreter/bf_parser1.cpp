@@ -21,19 +21,12 @@ bool BFParser::BFParserInstructions::AtEnd(inPtrType index)const
    return index == commands.size();
 }
 
-// Utility template function
-template<typename T>
-std::unique_ptr<T> make_unique()
-{
-   return std::unique_ptr<T>{new T};
-}
-
 // Constructor: parse the input.
 BFParser::BFParser(const std::string& input, bool strict)
 {
    // Use unique_ptr here, as if we throw later in the parse, want this to be
    // cleaned up for us.
-   auto instrucs = std::unique_ptr<BFParserInstructions>(new BFParserInstructions);
+   auto instrucs = std::make_unique<BFParserInstructions>();
    decltype(input.size()) offset = 0;
    std::stack<inPtrType> loops;
    while ( offset < input.size() )
@@ -47,31 +40,31 @@ BFParser::BFParser(const std::string& input, bool strict)
             // Whitespace
             break;
          case '+':
-            instrucs->commands.push_back(make_unique<CommandIncCell>());
+            instrucs->commands.push_back(std::make_unique<CommandIncCell>());
             break;
          case '-':
-            instrucs->commands.push_back(make_unique<CommandDecCell>());
+            instrucs->commands.push_back(std::make_unique<CommandDecCell>());
             break;
          case '>':
-            instrucs->commands.push_back(make_unique<CommandIncPtr>());
+            instrucs->commands.push_back(std::make_unique<CommandIncPtr>());
             break;
          case '<':
-            instrucs->commands.push_back(make_unique<CommandDecPtr>());
+            instrucs->commands.push_back(std::make_unique<CommandDecPtr>());
             break;
          case '.':
-            instrucs->commands.push_back(make_unique<CommandWrite>());
+            instrucs->commands.push_back(std::make_unique<CommandWrite>());
             break;
          case ',':
-            instrucs->commands.push_back(make_unique<CommandRead>());
+            instrucs->commands.push_back(std::make_unique<CommandRead>());
             break;
          case ']':
             if ( loops.empty() )
             {
                throw UnMatchedBracket{};
             }
-            instrucs->commands.push_back(std::unique_ptr<CommandLoopEnd>(new CommandLoopEnd{loops.top()} ));
+            instrucs->commands.push_back(std::make_unique<CommandLoopEnd>(loops.top()));
             // Alter starting loop to now point to next instruction
-            instrucs->commands[loops.top()] = std::unique_ptr<CommandLoopBegin>(new CommandLoopBegin{static_cast<inPtrType>(instrucs->commands.size())});
+            instrucs->commands[loops.top()] = std::make_unique<CommandLoopBegin>(static_cast<inPtrType>(instrucs->commands.size()));
             loops.pop();
             break;
          case '[':
